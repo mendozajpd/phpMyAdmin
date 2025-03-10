@@ -1,0 +1,40 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: my-mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: mydb
+      MYSQL_USER: myuser
+      MYSQL_PASSWORD: mypassword
+      MYSQL_GRANT_ALL_PRIVILEGES: "yes"  # Add this line
+    ports:
+      - "3307:3307"
+    networks:
+      - my-network
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: my-phpmyadmin
+    restart: always
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: rootpassword
+      UPLOAD_LIMIT: 1024M
+      MEMORY_LIMIT: 1536M
+      POST_MAX_SIZE: 1024M
+    ports:
+      - "8081:80"
+    networks:
+      - my-network
+
+networks:
+  my-network:
+
+volumes:
+  mysql_data:
